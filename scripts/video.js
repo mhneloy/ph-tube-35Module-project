@@ -60,14 +60,15 @@ const DisplayCard = (videos) => {
     <div class="flex gap-2 items-center mb-2">
       <img
         src="${video.authors[0].profile_picture}"
-        alt="${video.authors[0].profile_picture.profile_name}"
+        alt="${video.authors[0].profile_name}"
         class="w-10 h-10 rounded-full object-cover"
       />
       <h2 class="card-title text-lg line-clamp-2">${video.title}</h2>
     </div>
 
-    <p class="text-sm text-gray-500 truncate">
-      ${video.authors[0].profile_picture.profile_name}
+    <p class="text-sm text-gray-500 truncate flex gap-5 justify-start items-center">
+      ${video.authors[0].profile_name}
+      <span>${video.authors[0].verified == true ? '<img src="https://static.vecteezy.com/system/resources/thumbnails/047/309/918/small_2x/verified-badge-profile-icon-png.png" class="w-5" />' : " "}</span>
     </p>
     <p class="text-sm text-gray-500 mt-auto">
       ${video.others.views} views
