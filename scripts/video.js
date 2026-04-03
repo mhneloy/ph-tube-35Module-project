@@ -40,6 +40,29 @@ const DisplayCategories = (categories) => {
   });
 };
 
+// get time/date
+
+const getTimeDate = (time) => {
+  // 1. Calculate units using Remainder (%)
+  const day = Math.floor(time / 86400);
+  const hrs = Math.floor((time % 86400) / 3600);
+  const min = Math.floor((time % 3600) / 60);
+  const sec = time % 60;
+
+  // 2. Build the string conditionally
+  // We check if the number is greater than 0 instead of .length
+  let result = "";
+
+  if (day > 0) result += `${day} day `;
+  if (hrs > 0) result += `${hrs}hr `;
+  if (min > 0) result += `${min}min `;
+  result += `${sec}sec`;
+
+  return result.trim();
+};
+
+console.log(getTimeDate(90000)); // Output: "1 day 1hr 0min 0sec"
+
 // create DisplayCard
 
 const DisplayCard = (videos) => {
@@ -48,12 +71,21 @@ const DisplayCard = (videos) => {
     const card = document.createElement("div");
     card.innerHTML = `
         <div class="card bg-base-100 w-96 shadow-sm flex flex-col">
-  <figure class="h-52 overflow-hidden">
+  <figure class="h-52 overflow-hidden relative">
     <img
       src="${video.thumbnail}"
       alt="${video.title}"
       class="w-full h-full object-cover"
     />
+    ${
+      video.others.posted_date?.length == 0
+        ? " "
+        : `
+      <span class="absolute bottom-4 right-4 bg-white color-[#000000]">
+      ${getTimeDate(video.others.posted_date)}
+      </span>
+      `
+    }
   </figure>
 
   <div class="card-body flex flex-col flex-1">
