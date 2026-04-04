@@ -21,6 +21,17 @@ const loadVideo = () => {
 };
 
 loadVideo();
+
+const loadCategoriesVideos = (id) => {
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data.category);
+      return DisplayCard(data.category);
+    })
+    .catch((err) => console.log(err));
+};
+
 // Create DisplayCategories
 
 const DisplayCategories = (categories) => {
@@ -28,15 +39,19 @@ const DisplayCategories = (categories) => {
   const button = document.createElement("button");
   button.classList = "btn";
   button.innerText = "All";
+  button.onclick = () => loadVideo();
   categoryContainer.append(button);
   categories.forEach((element) => {
     // create a button
-    const button = document.createElement("button");
-    button.classList = "btn"; // button.classList ekhante amara ekshate onek gula class add krote pari ekshate inverted comma er bhitore
-    button.innerText = element.category;
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = `
+      <button onclick="loadCategoriesVideos(${element.category_id})" class="btn">
+      ${element.category}
+      </button>
+    `;
 
     // add button to category container
-    categoryContainer.append(button);
+    categoryContainer.append(buttonContainer);
   });
 };
 
@@ -61,12 +76,16 @@ const getTimeDate = (time) => {
   return result.trim();
 };
 
-console.log(getTimeDate(90000)); // Output: "1 day 1hr 0min 0sec"
-
 // create DisplayCard
 
 const DisplayCard = (videos) => {
   const videoContainer = document.getElementById("videos");
+  videoContainer.innerHTML = " ";
+  if (videos.length == 0) {
+    const card = document.createElement("div");
+    card.i;
+    return;
+  }
   videos.forEach((video) => {
     const card = document.createElement("div");
     card.innerHTML = `
