@@ -15,6 +15,11 @@ const loadVideo = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
     .then((res) => res.json())
     .then((data) => {
+      // remove the active class from other buttons
+      removeActive();
+      // add the active class
+      const all_cetogry_btn = document.querySelector(".all-cetogry-btn");
+      all_cetogry_btn.classList.add("active");
       return DisplayCard(data.videos);
     })
     .catch((err) => console.log(err));
@@ -26,10 +31,26 @@ const loadCategoriesVideos = (id) => {
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data.category);
-      return DisplayCard(data.category);
+      // remove the active class from all button
+      removeActive();
+
+      // adding the active class on active btn only
+      const btn_id = document.getElementById(`btn-${id}`);
+      btn_id.classList.add("active");
+      DisplayCard(data.category);
+      return;
     })
     .catch((err) => console.log(err));
+};
+
+// remvoe active class from category button
+
+const removeActive = () => {
+  const activebtn = document.getElementsByClassName("category-btn");
+  for (let button of activebtn) {
+    button.classList.remove("active");
+  }
+  console.log(activebtn.length);
 };
 
 // Create DisplayCategories
@@ -37,7 +58,7 @@ const loadCategoriesVideos = (id) => {
 const DisplayCategories = (categories) => {
   const categoryContainer = document.getElementById("categories");
   const button = document.createElement("button");
-  button.classList = "btn";
+  button.classList = "btn active category-btn all-cetogry-btn";
   button.innerText = "All";
   button.onclick = () => loadVideo();
   categoryContainer.append(button);
@@ -45,7 +66,7 @@ const DisplayCategories = (categories) => {
     // create a button
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-      <button onclick="loadCategoriesVideos(${element.category_id})" class="btn">
+      <button id="btn-${element.category_id}" onclick="loadCategoriesVideos(${element.category_id})" class="btn category-btn">
       ${element.category}
       </button>
     `;
