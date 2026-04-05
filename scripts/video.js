@@ -1,5 +1,4 @@
 //1. Fetch, Load and show Categories on html
-
 // create loadCategories
 const loadCategories = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
@@ -11,18 +10,17 @@ const loadCategories = () => {
 loadCategories();
 
 // create loadVideo
-const loadVideo = () => {
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
-    .then((res) => res.json())
-    .then((data) => {
-      // remove the active class from other buttons
-      removeActive();
-      // add the active class
-      const all_cetogry_btn = document.querySelector(".all-cetogry-btn");
-      all_cetogry_btn.classList.add("active");
-      return DisplayCard(data.videos);
-    })
-    .catch((err) => console.log(err));
+const loadVideo = async () => {
+  const res = await fetch(
+    "https://openapi.programming-hero.com/api/phero-tube/videos",
+  );
+  const data = await res.json();
+  // remove the active class from other buttons
+  removeActive();
+  // add the active class
+  const all_cetogry_btn = document.querySelector(".all-cetogry-btn");
+  all_cetogry_btn.classList.add("active");
+  return DisplayCard(data.videos);
 };
 
 loadVideo();
@@ -50,7 +48,6 @@ const removeActive = () => {
   for (let button of activebtn) {
     button.classList.remove("active");
   }
-  console.log(activebtn.length);
 };
 
 // Create DisplayCategories
@@ -97,6 +94,22 @@ const getTimeDate = (time) => {
   return result.trim();
 };
 
+// loadVideoDetails
+
+const loadVideoDetails = async (videoId) => {
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`,
+  );
+  const data = await res.json();
+  const modalParentDiv = document.getElementById("dynamic_modalText");
+  modalParentDiv.innerHTML = `
+  <img
+              src="${data.video.thumbnail}"
+              alt="Shoes" class="w-full" />
+        <p>${data.video.description}</p>
+      `;
+};
+
 // create DisplayCard
 
 const DisplayCard = (videos) => {
@@ -119,7 +132,7 @@ const DisplayCard = (videos) => {
   videos.forEach((video) => {
     const card = document.createElement("div");
     card.innerHTML = `
-        <div class="card bg-base-100 w-96 shadow-sm flex flex-col">
+        <div class="card bg-base-100 w-96 shadow-sm flex flex-col" onclick = "loadVideoDetails('${video.video_id}'); my_modal_1.showModal()">
   <figure class="h-52 overflow-hidden relative">
     <img
       src="${video.thumbnail}"
