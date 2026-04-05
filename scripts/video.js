@@ -83,8 +83,17 @@ const DisplayCard = (videos) => {
   videoContainer.innerHTML = " ";
   if (videos.length == 0) {
     const card = document.createElement("div");
-    card.i;
+    videoContainer.classList.remove("grid");
+    card.innerHTML = `
+      <div class="w-full min-h-screen flex gap-5 justify-center items-center flex-col">
+        <img src = "./assets/Icon.png" class='w-30'/>
+        <p>Opps! there is no video </p>
+      </div>
+    `;
+    videoContainer.append(card);
     return;
+  } else {
+    videoContainer.classList.add("grid");
   }
   videos.forEach((video) => {
     const card = document.createElement("div");
