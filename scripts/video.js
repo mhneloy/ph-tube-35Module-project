@@ -10,20 +10,19 @@ const loadCategories = () => {
 loadCategories();
 
 // create loadVideo
-const loadVideo = async () => {
+const loadVideo = async (sort_text = "") => {
   const res = await fetch(
-    "https://openapi.programming-hero.com/api/phero-tube/videos",
+    `https://openapi.programming-hero.com/api/phero-tube/videos?title=${sort_text}`,
   );
   const data = await res.json();
   // remove the active class from other buttons
   removeActive();
   // add the active class
+  DisplayCard(data.videos);
   const all_cetogry_btn = document.querySelector(".all-cetogry-btn");
   all_cetogry_btn.classList.add("active");
-  return DisplayCard(data.videos);
+  return;
 };
-
-loadVideo();
 
 const loadCategoriesVideos = (id) => {
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
@@ -175,3 +174,9 @@ const DisplayCard = (videos) => {
     videoContainer.append(card);
   });
 };
+
+document.getElementById("input-search").addEventListener("keyup", (e) => {
+  loadVideo(e.target.value);
+});
+
+loadVideo();
